@@ -1,9 +1,0 @@
-{
-  "name": "caloric-elves",
-  "version": "1.0.0",
-  "description": "Advent of Code day 1, find the elf hoarding the most calories",
-  "main": "index.js",
-  "author": "qqz",
-  "license": "ISC",
-  "dependencies": {}
-}

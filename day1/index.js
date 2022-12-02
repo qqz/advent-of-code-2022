@@ -39,6 +39,28 @@ async function getMaxCaloriesFromFileInput() {
   const maxCaloriesByOneElf = Math.max.apply( null, sumOfEachElf );
   
   console.log(maxCaloriesByOneElf); // Log answer out to console
+
+  // Part two
+
+  // write JavaScript sort function for numbers
+  sumOfEachElf.sort(function (a, b){
+    if (a < b) {
+      return -1;
+    } else if (a > b) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
+  console.log(sumOfEachElf);
+  const numberOfElves = sumOfEachElf.length;
+  
+  console.log( 
+    sumOfEachElf[numberOfElves - 1] +
+    sumOfEachElf[numberOfElves - 2] +
+    sumOfEachElf[numberOfElves - 3]
+  )
 }
 
 getMaxCaloriesFromFileInput();

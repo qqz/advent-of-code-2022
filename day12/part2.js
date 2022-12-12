@@ -1,10 +1,12 @@
 const fs = require('fs');
 
 const dataByLine = fs.readFileSync('input.txt').toString().split(/\n/);
-let lines = [];
-let elevations = [];
-let stepsToVisit = [];
-let start, end;
+let lines = [],
+    elevations = [],
+    stepsToVisitTemplate = [],
+    start = [], 
+    end = [],
+    finalScorePerStartPoint = [];
 
 dataByLine.forEach(function(value){
     if (value !== '') {
@@ -15,29 +17,37 @@ dataByLine.forEach(function(value){
 // Build elevations grid and mark S and E for start and end
 lines.forEach(function(value, index){
     elevations.push([]);
-    stepsToVisit.push([]);
+    stepsToVisitTemplate.push([]);
     for (let i = 0; i < value.length; i++){
         const currentLetter = value[i];
         elevations[index].push(currentLetter);
-        stepsToVisit[index].push(0);
-        if (currentLetter == "S") {
-            start = [index,i];
+        stepsToVisitTemplate[index].push(0);
+        if (currentLetter == "S" || currentLetter == "a") {
+            start.push([index,i])
         } else if (currentLetter == "E"){
             end = [index,i];
         }
     }
 });
 
-let toVisit = [start];
+// For each starting point, build a queue of places to visit adjacent to where you are currently
+// Visit those places and keep track of the number of steps to the end
+start.forEach(function(value){
+    let toVisit = [value];
+    let stepsToVisit = structuredClone(stepsToVisitTemplate);
+    while (toVisit.length > 0) {
+        const current = toVisit.shift();
+        checkNextSquares(current[0], current[1], stepsToVisit, toVisit);
+    }
+    const stepsToReachEnd = stepsToVisit[end[0]][end[1]]
+    if (stepsToReachEnd > 0) {
+        finalScorePerStartPoint.push(stepsToReachEnd);
+    }
+});
 
-while (toVisit.length > 0) {
-    const current = toVisit.shift();
-    checkNextSquares(current[0], current[1]);
-}
+console.log(Math.min(...finalScorePerStartPoint));
 
-console.log(stepsToVisit[end[0]][end[1]]);
-
-function checkNextSquares(x, y){
+function checkNextSquares(x, y, stepsToVisit, toVisit){
 
     const north = [x-1, y];
     const east = [x, y+1];
